@@ -1,24 +1,53 @@
-.App {
-  text-align: center;
+.container {
+  padding: 0 150px;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+.newPost {
+    display: flex;
+    align-items: center;
 }
 
-.App-intro {
-  font-size: large;
+.categoriesList {
+  margin: 30px 0px 0px 0px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.category {
+  padding: 20px 50px;
+  border-radius: 20px;
+  border:1px solid black;
+}
+
+.selectedCategory {
+  padding: 20px 50px;
+  background-color: LawnGreen;
+  border-radius: 20px;
+  border:1px solid black;
+}
+
+.board {
+  padding: 20px 0px;
+}
+
+.postSummaryDetails {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.postSummaryValues {
+  display: flex;
+  align-items: center;
+}
+
+.postSummaryVoteScore {
+  padding-right: 50px;
 }
