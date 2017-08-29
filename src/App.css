@@ -51,3 +51,22 @@
 .postSummaryVoteScore {
   padding-right: 50px;
 }
+
+.headerTable {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sortOptions {
+  display: flex;
+  justify-content: space-around;
+  align-items:  center;
+}
+
+.voteScore {
+  margin-left: 20px;
+}
+
+.timestamp {
+  margin-left: 20px;
+}

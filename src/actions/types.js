@@ -7,3 +7,5 @@ export const FILTER_CATEGORY = 'filter_category';
 export const LOAD_POSTS = 'load_posts';
 //set filter for a specific category
 export const FILTER_CATEGORY_POST = 'filter_category_post';
+//Sort by an specific field
+export const SORT_BY = 'sort_by';

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { loadAllCategories, loadAllPosts } from './actions';
+import {
+  loadAllCategories,
+  loadAllPosts,
+  setSortBy } from './actions';
 import Category from './components/Category';
 import PostSummary from './components/PostSummary';
 import PlusSquare from 'react-icons/lib/fa/plus-square-o';
@@ -24,6 +27,9 @@ selectedCategory = (categoryName) => {
 }
 
   render() {
+
+    const { filteredPosts, sortBy } = this.props.posts;
+
     return (
       <div className="container">
         <div className="nav">
@@ -49,9 +55,34 @@ selectedCategory = (categoryName) => {
         </div>
 
         <div className="board">
-          <h2>Posts</h2>
-          {this.props.posts.filteredPosts.length > 0 &&
-           this.props.posts.filteredPosts.map((item) => (
+          <div className="headerTable">
+            <h2>Posts</h2>
+            <div className="sortOptions">
+              <h2>Sort by</h2>
+              <div className="voteScore">
+                <label>
+                  <input
+                    type="radio"
+                    value="voteScore"
+                    name="sortBy"
+                    checked={sortBy === 'voteScore'}
+                    onChange={() => this.props.setSortBy('voteScore')} /> voteScore
+                </label>
+              </div>
+              <div className="timestamp">
+                <label>
+                  <input
+                    type="radio"
+                    value="timestamp"
+                    name="sortBy"
+                    checked={sortBy === 'timestamp'}
+                    onChange={() => this.props.setSortBy('timestamp')}/> timestamp
+                </label>
+              </div>
+            </div>
+          </div>
+          {filteredPosts.length > 0 &&
+           filteredPosts.map((item) => (
             <PostSummary
               key={item.id}
               title={item.title}
@@ -74,5 +105,6 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps, {
   loadAllCategories,
-  loadAllPosts
+  loadAllPosts,
+  setSortBy
 })(App);

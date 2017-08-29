@@ -1,4 +1,7 @@
-import { LOAD_POSTS, FILTER_CATEGORY } from './types';
+import {
+  LOAD_POSTS,
+  FILTER_CATEGORY,
+  SORT_BY } from './types';
 import * as PostsAPI from '../PostsAPI';
 
 export const loadAllPosts = (dispatch) => {
@@ -25,5 +28,12 @@ export function setFilterPostByCategories(category) {
   return {
     type: FILTER_CATEGORY,
     category
+  }
+}
+
+export function setSortBy(sortBy) {
+  return {
+    type: SORT_BY,
+    sortBy
   }
 }
