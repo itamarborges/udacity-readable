@@ -8,9 +8,10 @@
   align-items: flex-end;
 }
 
-.newPost {
-    display: flex;
-    align-items: center;
+.newPostAction{
+  display: flex;
+  color: black;
+  align-items: center;
 }
 
 .categoriesList {
@@ -24,6 +25,7 @@
   padding: 20px 50px;
   border-radius: 20px;
   border:1px solid black;
+  cursor:default;
 }
 
 .selectedCategory {
@@ -31,6 +33,7 @@
   background-color: LawnGreen;
   border-radius: 20px;
   border:1px solid black;
+  cursor:default;
 }
 
 .board {
@@ -69,4 +72,67 @@
 
 .timestamp {
   margin-left: 20px;
+}
+
+.postForm {
+  padding-top: 50px;
+}
+
+.postForm input {
+  width: 100%;
+  padding: 5px 0;
+  margin-bottom: 10px;
+  padding-right:0px;
+  font-size: inherit;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  outline: 0;
+}
+
+.postForm label {
+  display: inherit;
+  width: 100%;
+  padding: 1px 0;
+  margin-bottom: 10px;
+  padding-right:0px;
+  font-size: inherit;
+  background: transparent;
+}
+
+.postForm textarea {
+  width: 100%;
+  padding: 5px 5px;
+  margin-bottom: 10px;
+  padding-right:0px;
+  font-size: inherit;
+  background: transparent;
+  border: 1px solid #ccc;
+  resize: none;
+  height: 200px;
+}
+
+.navPost {
+  display: flex;
+  justify-content: space-between;
+  align-items:  center;
+}
+
+.closePostAction {
+  display: flex;
+  color: black;
+  align-items: center;
+}
+
+.categorySelect {
+  width: 100%;
+  margin: 10px 0;
+  font-size: inherit;
+}
+
+.btnAddPost {
+  width: 25%;
+  margin: 10px 0;
+  font-size: inherit;
+  padding: 25px;
 }

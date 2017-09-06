@@ -1,7 +1,9 @@
 import {
   LOAD_POSTS,
   FILTER_CATEGORY,
-  SORT_BY
+  SORT_BY,
+  GET_POST,
+  CHANGE_POST
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -9,6 +11,7 @@ const INITIAL_STATE = {
   categoriesFilter: [],
   filteredPosts: {},
   sortBy: 'voteScore',
+  postDetails: {}
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -60,6 +63,24 @@ export default (state = INITIAL_STATE, action) => {
             categoriesFilter,
             filteredPosts
           };
+          case GET_POST:
+            return { ...state,
+              postDetails: action.post,
+            };
+          case CHANGE_POST:
+            return { ...state,
+              postDetails:  {
+                ...state['postDetails'],
+                post: {
+                  ...state['postDetails']['post'],
+                  title: action.title,
+                  body: action.body,
+                  author: action.author,
+                  category: action.category
+                }
+
+              }
+            };
       default:
         return state;
       }
