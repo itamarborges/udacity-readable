@@ -2,7 +2,7 @@
 export const LOAD_CATEGORIES = 'load_categories';
 
 //set filter for a specific category
-export const FILTER_CATEGORY = 'filter_category';
+export const UPDATE_FILTERED_POSTS = 'update_filtered_posts';
 //load all posts from API
 export const LOAD_POSTS = 'load_posts';
 //set filter for a specific category
@@ -13,3 +13,7 @@ export const SORT_BY = 'sort_by';
 export const GET_POST = 'get_post';
 //change the values of a post
 export const CHANGE_POST = 'change_post';
+//change the values of a post
+export const GET_COMMENTS = 'get_comments';
+//update a post votescore
+export const UPDATE_POST_VOTESCORE = 'update_post_votescore';

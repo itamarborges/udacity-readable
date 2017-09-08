@@ -87,7 +87,7 @@ selectedCategory = (categoryName) => {
                 </div>
               </div>
                 {filteredPosts.length > 0 &&
-               filteredPosts.map((item) => (
+               filteredPosts.map((item) => !item.deleted && (
                 <PostSummary
                   key={item.id}
                   id={item.id}

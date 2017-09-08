@@ -1,29 +1,36 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import serializeForm from 'form-serialize';
 import FaEdit from 'react-icons/lib/fa/edit';
 import FaClose from 'react-icons/lib/fa/close';
-import { getPost } from './../actions';
-import * as PostsAPI from '../PostsAPI';
+import FaTrashO from 'react-icons/lib/fa/trash-o';
+import {
+  getPost,
+  deletePost,
+  getComments,
+  updatePostVoteScore } from './../actions';
 
 class PostDetails extends React.Component {
-
-  handleSubmit = (e) => {
-
-    e.preventDefault();
-    const values = serializeForm(e.target, { hash: true });
-    values.timestamp = Date.now();
-    values.id = Date.now().toString();
-    PostsAPI.createPost(values);
-    this.props.onGoBack();
-
-}
 
   componentDidMount() {
     const { id } = this.props.match.params;
 
     this.props.getPost(id);
+    this.props.getComments(id);
+  }
+
+  deletePost = () => {
+    const { id } = this.props.match.params;
+    this.props.deletePost(id);
+
+  }
+
+  increaseScore = (increase) => (e) => {
+    e.preventDefault();
+
+    const { id } = this.props.match.params;
+
+    this.props.updatePostVoteScore(id, increase);
   }
 
   render() {
@@ -32,6 +39,8 @@ class PostDetails extends React.Component {
     let body = '';
     let author = '';
     let id = '';
+    let timestamp = '';
+    let voteScore = '';
 
     if (this.props.post) {
       id = this.props.post.id;
@@ -39,8 +48,12 @@ class PostDetails extends React.Component {
       category = this.props.post.category;
       body = this.props.post.body;
       author = this.props.post.author;
+      timestamp = this.props.post.timestamp;
+      voteScore = this.props.post.voteScore;
     }
 
+
+console.log(this.props);
 
     return (
       <div className="container">
@@ -49,6 +62,10 @@ class PostDetails extends React.Component {
           <Link to={`edit/${id}`} className="closePostAction">
             <FaEdit size={30}/>
             <h2>Edit Post</h2>
+          </Link>
+          <Link to='/' className="closePostAction" onClick={this.deletePost} >
+            <FaTrashO size={30}/>
+            <h2>Delete Post</h2>
           </Link>
           <Link to='/' className="closePostAction">
             <FaClose size={30}/>
@@ -70,6 +87,20 @@ class PostDetails extends React.Component {
             <label>Author:</label>
             <label>{author}</label>
 
+            <label>Date:</label>
+            <label>{(new Date(timestamp)).toUTCString()}</label>
+
+            <label>VoteScore:</label>
+            <label>{voteScore}</label>
+
+            <div className="btnVoteScore">
+              <button className="btnVoteScore" onClick={this.increaseScore(true)} > Increase VoteScore</button>
+              <button className="btnVoteScore" onClick={this.increaseScore(false)}> Decrease ScoreScore</button>
+            </div>
+
+            <h3>Comments ({this.props.comments && this.props.comments.length}):</h3>
+
+
 
           </div>
         </form>
@@ -81,10 +112,14 @@ class PostDetails extends React.Component {
 
 const mapStateToProps = state => {
   const { post } = state.posts.postDetails;
+  const { comments } = state.posts;
 
-  return { post };
+  return { post, comments };
 };
 
 export default connect(mapStateToProps, {
   getPost,
+  deletePost,
+  getComments,
+  updatePostVoteScore
 }, null, {pure:false})(PostDetails);

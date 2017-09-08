@@ -1,9 +1,10 @@
 import {
   LOAD_POSTS,
-  FILTER_CATEGORY,
+  UPDATE_FILTERED_POSTS,
   SORT_BY,
   GET_POST,
-  CHANGE_POST
+  CHANGE_POST,
+  GET_COMMENTS
   } from './types';
 import * as PostsAPI from '../PostsAPI';
 
@@ -14,6 +15,7 @@ export const loadAllPosts = () => {
     .then(posts => {
       loadPosts(dispatch, posts);
     })
+    .then(() => updateFilteredPosts(dispatch))
     .catch((error) => {
       console.log(error);
     });
@@ -49,7 +51,7 @@ const getSpecificPost = (dispatch, post) => {
 
 export function setFilterPostByCategories(category) {
   return {
-    type: FILTER_CATEGORY,
+    type: UPDATE_FILTERED_POSTS,
     category
   }
 }
@@ -70,3 +72,58 @@ export function updatePost({title, category, body, author}) {
     author
   }
 }
+
+export const deletePost = (id) => {
+  return (dispatch) => {
+
+    PostsAPI.deletePost(id)
+    .then(() => {
+      dispatch(loadAllPosts());
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  };
+};
+
+const updateFilteredPosts = (dispatch) => {
+  dispatch({
+    type: UPDATE_FILTERED_POSTS
+  });
+}
+
+export const getComments = (id) => {
+  return (dispatch) => {
+
+    PostsAPI.getComments(id)
+    .then(comments => {
+      getPostComments(dispatch, comments);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  };
+};
+
+const getPostComments = (dispatch, comments) => {
+  dispatch({
+    type: GET_COMMENTS,
+    comments
+  });
+}
+
+export const updatePostVoteScore = (id, increaseScore) => {
+  return (dispatch) => {
+    debugger;
+    const body = increaseScore ? { option: "upVote" } : { option: "downVote" };
+
+    PostsAPI.updatePostVoteScore(id, body)
+    .then(() => {
+      dispatch(getPost(id));
+      dispatch(loadAllPosts());
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  };
+};

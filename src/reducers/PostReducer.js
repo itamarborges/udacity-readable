@@ -1,9 +1,10 @@
 import {
   LOAD_POSTS,
-  FILTER_CATEGORY,
+  UPDATE_FILTERED_POSTS,
   SORT_BY,
   GET_POST,
-  CHANGE_POST
+  CHANGE_POST,
+  GET_COMMENTS
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -11,76 +12,89 @@ const INITIAL_STATE = {
   categoriesFilter: [],
   filteredPosts: {},
   sortBy: 'voteScore',
-  postDetails: {}
+  postDetails: {},
+  comments: {}
 };
 
 export default (state = INITIAL_STATE, action) => {
     let sortBy = state.sortBy;
-    let categoriesFilter = state.categoriesFilter;
-    let filteredPosts =  state.allPosts;
+
+    let filteredPosts =  null;
 
     switch (action.type) {
       case LOAD_POSTS:
         return { ...state,
           allPosts: action.posts,
-          filteredPosts: action.posts,
+          filteredPosts: action.posts.filter((item) => !item.deleted),
         };
-        case SORT_BY:
-          sortBy = action.sortBy;
-          filteredPosts = state.filteredPosts;
 
-          if (sortBy === 'voteScore') {
-            filteredPosts.sort((a,b) => b.voteScore - a.voteScore);
-          } else {
-            filteredPosts.sort((a,b) => b.timestamp - a.timestamp);
+      case SORT_BY:
+        sortBy = action.sortBy;
+        filteredPosts = state.filteredPosts;
+
+        if (sortBy === 'voteScore') {
+          filteredPosts.sort((a,b) => b.voteScore - a.voteScore);
+        } else {
+          filteredPosts.sort((a,b) => b.timestamp - a.timestamp);
+        }
+        return { ...state,
+          filteredPosts,
+          sortBy
+        };
+
+      case UPDATE_FILTERED_POSTS:
+        debugger;
+
+        let categoriesFilter = state.categoriesFilter;
+
+        if (categoriesFilter.length > 0 &&
+          categoriesFilter.filter((item) => item === action.category).length > 0) {
+          categoriesFilter = categoriesFilter.filter((item) => item !== action.category);
+        } else {
+          action.category && categoriesFilter.push(action.category);
+        }
+
+        filteredPosts = state.allPosts.filter((item) => !item.deleted );
+
+        if (categoriesFilter.length > 0 ) {
+          filteredPosts = filteredPosts.filter(
+            (item) => categoriesFilter.indexOf(item.category) >= 0 );
+        }
+
+        if (sortBy === 'voteScore') {
+          filteredPosts.sort((a,b) => b.voteScore - a.voteScore);
+        } else {
+          filteredPosts.sort((a,b) => b.timestamp - a.timestamp);
+        }
+
+
+        return { ...state,
+          categoriesFilter,
+          filteredPosts
+        };
+      case GET_POST:
+        return { ...state,
+          postDetails: action.post,
+        };
+      case GET_COMMENTS:
+        return { ...state,
+          comments: action.comments,
+        };
+      case CHANGE_POST:
+        return { ...state,
+          postDetails:  {
+            ...state['postDetails'],
+            post: {
+              ...state['postDetails']['post'],
+              title: action.title,
+              body: action.body,
+              author: action.author,
+              category: action.category
+            }
+
           }
-          return { ...state,
-            filteredPosts,
-            sortBy
-          };
-        case FILTER_CATEGORY:
+        };
 
-          if (categoriesFilter.length > 0 &&
-            categoriesFilter.filter((item) => item === action.category).length > 0) {
-            categoriesFilter = categoriesFilter.filter((item) => item !== action.category);
-          } else {
-            categoriesFilter.push(action.category);
-          }
-
-          if (categoriesFilter.length > 0 ) {
-            filteredPosts = state.allPosts.filter(
-              (item) => categoriesFilter.indexOf(item.category) >= 0 );
-          }
-
-          if (sortBy === 'voteScore') {
-            filteredPosts.sort((a,b) => b.voteScore - a.voteScore);
-          } else {
-            filteredPosts.sort((a,b) => b.timestamp - a.timestamp);
-          }
-
-
-          return { ...state,
-            categoriesFilter,
-            filteredPosts
-          };
-          case GET_POST:
-            return { ...state,
-              postDetails: action.post,
-            };
-          case CHANGE_POST:
-            return { ...state,
-              postDetails:  {
-                ...state['postDetails'],
-                post: {
-                  ...state['postDetails']['post'],
-                  title: action.title,
-                  body: action.body,
-                  author: action.author,
-                  category: action.category
-                }
-
-              }
-            };
       default:
         return state;
       }

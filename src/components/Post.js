@@ -31,7 +31,7 @@ componentDidMount() {
 }
 
 onPostChange = () => {
-  const id = this.props.match ? this.props.match.params.id : null;
+//  const id = this.props.match ? this.props.match.params.id : null;
   debugger;
 //  if (id) {
     const title = this.titleInput.value;

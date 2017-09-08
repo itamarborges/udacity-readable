@@ -136,3 +136,11 @@
   font-size: inherit;
   padding: 25px;
 }
+
+.btnVoteScore{
+  display: flex;
+}
+
+.btnVoteScore{
+  margin-right: 20px;
+}
