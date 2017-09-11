@@ -10,7 +10,7 @@ class Post extends React.Component {
 
   handleSubmit = (e) => {
     const id = this.props.match ? this.props.match.params.id : null;
-    debugger;
+
     e.preventDefault();
     const values = serializeForm(e.target, { hash: true });
     if (!id) {
@@ -32,7 +32,6 @@ componentDidMount() {
 
 onPostChange = () => {
 //  const id = this.props.match ? this.props.match.params.id : null;
-  debugger;
 //  if (id) {
     const title = this.titleInput.value;
     const category = this.categorySelect.value;

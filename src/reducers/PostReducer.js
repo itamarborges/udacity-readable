@@ -4,7 +4,9 @@ import {
   SORT_BY,
   GET_POST,
   CHANGE_POST,
-  GET_COMMENTS
+  GET_COMMENTS,
+  SORT_COMMENT_BY,
+  EDIT_COMMENT
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -13,12 +15,16 @@ const INITIAL_STATE = {
   filteredPosts: {},
   sortBy: 'voteScore',
   postDetails: {},
-  comments: {}
+  comments: [],
+  sortByComment: 'voteScore',
+  openModal: false,
+  editingComment: {}
 };
 
 export default (state = INITIAL_STATE, action) => {
     let sortBy = state.sortBy;
-
+    let sortedComments = state.comments;
+    let sortByComment = state.sortByComment;
     let filteredPosts =  null;
 
     switch (action.type) {
@@ -43,8 +49,6 @@ export default (state = INITIAL_STATE, action) => {
         };
 
       case UPDATE_FILTERED_POSTS:
-        debugger;
-
         let categoriesFilter = state.categoriesFilter;
 
         if (categoriesFilter.length > 0 &&
@@ -77,9 +81,33 @@ export default (state = INITIAL_STATE, action) => {
           postDetails: action.post,
         };
       case GET_COMMENTS:
+
+      sortedComments = action.comments;
+
+      if (sortByComment === 'voteScore') {
+        sortedComments.sort((a,b) => b.voteScore - a.voteScore);
+      } else {
+        sortedComments.sort((a,b) => b.timestamp - a.timestamp);
+      }
+
         return { ...state,
-          comments: action.comments,
+          comments: sortedComments,
         };
+
+        case SORT_COMMENT_BY:
+
+        sortByComment = action.sortByComment;
+
+        if (sortByComment === 'voteScore') {
+          sortedComments.sort((a,b) => b.voteScore - a.voteScore);
+        } else {
+          sortedComments.sort((a,b) => b.timestamp - a.timestamp);
+        }
+
+          return { ...state,
+            comments: sortedComments,
+            sortByComment
+          };
       case CHANGE_POST:
         return { ...state,
           postDetails:  {
@@ -94,7 +122,11 @@ export default (state = INITIAL_STATE, action) => {
 
           }
         };
-
+        case EDIT_COMMENT:
+          return { ...state,
+            editingComment: action.comment,
+            openModal: action.openModal,
+          };
       default:
         return state;
       }

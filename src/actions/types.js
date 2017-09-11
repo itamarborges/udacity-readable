@@ -17,3 +17,7 @@ export const CHANGE_POST = 'change_post';
 export const GET_COMMENTS = 'get_comments';
 //update a post votescore
 export const UPDATE_POST_VOTESCORE = 'update_post_votescore';
+//sort comments by
+export const SORT_COMMENT_BY = 'sort_comment_by';
+//open modal
+export const EDIT_COMMENT = 'edit_comment';

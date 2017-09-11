@@ -4,7 +4,9 @@ import {
   SORT_BY,
   GET_POST,
   CHANGE_POST,
-  GET_COMMENTS
+  GET_COMMENTS,
+  SORT_COMMENT_BY,
+  EDIT_COMMENT
   } from './types';
 import * as PostsAPI from '../PostsAPI';
 
@@ -94,7 +96,6 @@ const updateFilteredPosts = (dispatch) => {
 
 export const getComments = (id) => {
   return (dispatch) => {
-
     PostsAPI.getComments(id)
     .then(comments => {
       getPostComments(dispatch, comments);
@@ -114,7 +115,6 @@ const getPostComments = (dispatch, comments) => {
 
 export const updatePostVoteScore = (id, increaseScore) => {
   return (dispatch) => {
-    debugger;
     const body = increaseScore ? { option: "upVote" } : { option: "downVote" };
 
     PostsAPI.updatePostVoteScore(id, body)
@@ -125,5 +125,89 @@ export const updatePostVoteScore = (id, increaseScore) => {
     .catch((error) => {
       console.log(error);
     });
+  };
+};
+
+
+export const updatePostVoteScoreComment = (comment, increaseScore) => {
+  return (dispatch) => {
+    const { id, parentId } = comment;
+    const body = increaseScore ? { option: "upVote" } : { option: "downVote" };
+
+    PostsAPI.updatePostVoteScoreComment(id, body)
+    .then(() => {
+      dispatch(getComments(parentId));
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  };
+};
+
+export const createComment = (values) => {
+  return (dispatch) => {
+
+    PostsAPI.createComment(values)
+    .then(() => {
+      dispatch(getComments(values.parentId));
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  };
+};
+
+export function setSortCommentBy(sortByComment) {
+  return {
+    type: SORT_COMMENT_BY,
+    sortByComment
+  }
+};
+
+export const deleteComment = (id, parentId) => {
+  return (dispatch) => {
+
+    PostsAPI.deleteComment(id)
+    .then(() => {
+      dispatch(getComments(parentId));
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  };
+};
+
+export const editComment = (openModal, idComment) => {
+  return (dispatch) => {
+    if (idComment) {
+      PostsAPI.getComment(idComment)
+      .then(comment => {
+        dispatch(editSpecificComment(openModal, comment));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    } else {
+      dispatch(editSpecificComment(openModal, {}));
+    }
+  };
+};
+
+const editSpecificComment = (openModal, comment) => {
+  return {
+    type: EDIT_COMMENT,
+    openModal,
+    comment
+  };
+};
+
+
+export const updateComment = (id, body, parentId) => {
+  return (dispatch) => {
+    debugger;
+    PostsAPI.updateComment(id, body);
+
+    dispatch(getComments(parentId));
+
   };
 };

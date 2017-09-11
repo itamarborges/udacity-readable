@@ -1,14 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import Comment from './Comment';
+import serializeForm from 'form-serialize';
 import FaEdit from 'react-icons/lib/fa/edit';
 import FaClose from 'react-icons/lib/fa/close';
 import FaTrashO from 'react-icons/lib/fa/trash-o';
+import Modal from 'react-modal';
 import {
   getPost,
   deletePost,
   getComments,
-  updatePostVoteScore } from './../actions';
+  updatePostVoteScore,
+  createComment,
+  setSortCommentBy,
+  editComment,
+  updateComment
+} from './../actions';
 
 class PostDetails extends React.Component {
 
@@ -19,15 +27,44 @@ class PostDetails extends React.Component {
     this.props.getComments(id);
   }
 
+  closeModal = () => {
+    this.props.editComment(false);
+  }
+  onClickComment = (id) => {
+    this.props.editComment(true, id);
+  }
+
   deletePost = () => {
     const { id } = this.props.match.params;
     this.props.deletePost(id);
 
   }
 
-  increaseScore = (increase) => (e) => {
+  handleEdit = (idComment) => (e) => {
     e.preventDefault();
 
+    const { id } = this.props.match.params;
+
+    const values = serializeForm(e.target, { hash: true });
+
+    this.props.updateComment(idComment, values, id);
+    this.closeModal();
+  }
+
+  handleSubmit = (e) => {
+    const id = this.props.match ? this.props.match.params.id : null;
+    debugger;
+    e.preventDefault();
+    const values = serializeForm(e.target, { hash: true });
+    values.timestamp = Date.now();
+    values.id = Date.now().toString();
+    values.parentId = id;
+    this.props.createComment(values);
+    this.authorInput.value = '';
+    this.bodyTextArea.value = '';
+  }
+
+  increaseScore = (increase) => (e) => {
     const { id } = this.props.match.params;
 
     this.props.updatePostVoteScore(id, increase);
@@ -52,8 +89,11 @@ class PostDetails extends React.Component {
       voteScore = this.props.post.voteScore;
     }
 
+    const comments =
+    this.props.comments &&
+    this.props.comments.filter((item) => !item.deleted).length > 0;
 
-console.log(this.props);
+    const { sortByComment } = this.props;
 
     return (
       <div className="container">
@@ -73,7 +113,7 @@ console.log(this.props);
           </Link>
 
         </div>
-        <form>
+
           <div className="postForm">
             <label>Title:</label>
             <label>{title}</label>
@@ -98,12 +138,97 @@ console.log(this.props);
               <button className="btnVoteScore" onClick={this.increaseScore(false)}> Decrease ScoreScore</button>
             </div>
 
-            <h3>Comments ({this.props.comments && this.props.comments.length}):</h3>
+          <div className="headerTable">
+            <h3>Comments ({
+              this.props.comments &&
+              this.props.comments.filter((item) => !item.deleted).length}):</h3>
+            {comments &&
+            <div className="sortOptions">
+              <h3>Sort by</h3>
+              <div className="sortByComment">
+                <label>
+                  <input
+                    type="radio"
+                    value="voteScore"
+                    name="sortBy"
+                    checked={sortByComment === 'voteScore'}
+                    onChange={() => this.props.setSortCommentBy('voteScore')}
+                    /> voteScore
+                </label>
+              </div>
+              <div className="sortByComment">
+                <label>
+                  <input
+                    type="radio"
+                    value="timestamp"
+                    name="sortBy"
+                    checked={sortByComment === 'timestamp'}
+                    onChange={() => this.props.setSortCommentBy('timestamp')}
+                    /> timestamp
+                </label>
+              </div>
+            </div>
+          }
+        </div>
+            {this.props.comments &&
+             this.props.comments.length > 0 &&
+             this.props.comments.map((item) => !item.deleted && (
+                 <Comment
+                   key={item.id}
+                   comment={item}
+                   onClick={() => this.onClickComment(item.id)}/>
+            ))}
+            <h3>New Comment</h3>
+            <form onSubmit={this.handleSubmit}>
+              <label>Author:</label>
+              <input
+                type='text'
+                name='author'
+                defaultValue=''
+                ref={(input) => { this.authorInput = input; }}
+              />
+              <label>Comment:</label>
+              <textarea
+                name='body'
+                defaultValue=''
+                ref={(text) => { this.bodyTextArea = text; }}
+              />
+              <button className="btnAddComment">Add Comment</button>
+            </form>
+
+            <Modal
+              className='modal'
+              isOpen={this.props.openModal}
+              onRequestClose={this.closeModal}
+              contentLabel='Modal'
+              >
+
+                  {this.props.editingComment.comment && (
+                  <div className="editComment">
+                    <form onSubmit={this.handleEdit(this.props.editingComment.comment.id)}>
+                      <label>Author:</label>
+                      <input
+                        type='text'
+                        name='author'
+                        defaultValue={this.props.editingComment.comment.author}
+                        ref={(input) => { this.authorEditInput = input; }}
+                      />
+                      <label>Comment:</label>
+                      <textarea
+                        name='body'
+                        defaultValue={this.props.editingComment.comment.body}
+                        ref={(text) => { this.bodyEditTextArea = text; }}
+                      />
+                      <button className="btnEditComment">Edit Comment</button>
+                    </form>
+                  </div>
+
+                  )}
 
 
-
+            </Modal>
           </div>
-        </form>
+
       </div>
 
     );
@@ -112,14 +237,18 @@ console.log(this.props);
 
 const mapStateToProps = state => {
   const { post } = state.posts.postDetails;
-  const { comments } = state.posts;
+  const { comments, sortByComment, openModal, editingComment } = state.posts;
 
-  return { post, comments };
+  return { post, comments, sortByComment, openModal, editingComment };
 };
 
 export default connect(mapStateToProps, {
   getPost,
   deletePost,
   getComments,
-  updatePostVoteScore
+  updatePostVoteScore,
+  createComment,
+  setSortCommentBy,
+  editComment,
+  updateComment
 }, null, {pure:false})(PostDetails);

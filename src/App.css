@@ -144,3 +144,58 @@
 .btnVoteScore{
   margin-right: 20px;
 }
+.comment {
+  padding-top: 20px;
+  padding-bottom: 20px;
+
+  border-bottom: 1px solid #ccc;
+}
+
+.headerComment {
+  display: flex;
+  justify-content: space-between;
+}
+
+.headerDateComment {
+
+}
+
+.btnVoteScoreComment {
+  display: flex;
+}
+
+
+.headerDeleteComment {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  cursor: pointer;
+  text-decoration: underline
+}
+
+.modal {
+  position: fixed;
+  left: 20%;
+  top: 40%;
+  width: 60%;
+  border: 1px solid rgb(204, 204, 204);
+  background: rgb(255, 255, 255);
+  overflow: auto;
+  border-radius: 4px;
+  outline: none;
+  padding: 20px;
+  border-radius: 3px;
+  box-shadow: 0 3px 8px 0 rgba(0,0,0,.24), 0 3px 12px 0 rgba(0,0,0,.12);
+  min-width: 500px;
+}
+
+.editComment {
+  justify-content: space-around;
+}
+
+.editComment label, input, textarea{
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-size: inherit;
+}
