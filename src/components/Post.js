@@ -31,8 +31,8 @@ componentDidMount() {
 }
 
 onPostChange = () => {
-//  const id = this.props.match ? this.props.match.params.id : null;
-//  if (id) {
+  const id = this.props.match ? this.props.match.params.id : null;
+  if (id) {
     const title = this.titleInput.value;
     const category = this.categorySelect.value;
     const body = this.bodyTextArea.value;
@@ -44,8 +44,7 @@ onPostChange = () => {
       body,
       author
     });
-  //}
-
+  }
 }
 
 render() {

@@ -13,11 +13,13 @@ export const SORT_BY = 'sort_by';
 export const GET_POST = 'get_post';
 //change the values of a post
 export const CHANGE_POST = 'change_post';
-//change the values of a post
-export const GET_COMMENTS = 'get_comments';
 //update a post votescore
 export const UPDATE_POST_VOTESCORE = 'update_post_votescore';
 //sort comments by
 export const SORT_COMMENT_BY = 'sort_comment_by';
 //open modal
 export const EDIT_COMMENT = 'edit_comment';
+//reset post and comments
+export const CLEAR_POST = 'clear_post';
+//reset post and comments
+export const LOAD_COMMENTS = 'load_comments';

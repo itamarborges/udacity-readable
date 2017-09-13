@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import FaTrashO from 'react-icons/lib/fa/trash-o';
+import FaEdit from 'react-icons/lib/fa/edit';
 import {
   updatePostVoteScoreComment,
   deleteComment
@@ -35,6 +36,10 @@ class Comment extends React.Component {
       <div className="comment">
         <div className="headerComment">
           <label onClick={this.props.onClick}>By: {comment.author} in {(new Date(comment.timestamp)).toUTCString()}</label>
+          <a className="headerDeleteComment" onClick={this.props.onClick}>
+            <FaEdit size={30}/>
+            <h3>Edit Comment</h3>
+          </a>
             <a className="headerDeleteComment" onClick={this.deleteComment}>
               <FaTrashO size={30}/>
               <h3>Delete Comment</h3>

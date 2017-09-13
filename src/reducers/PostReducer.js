@@ -4,18 +4,19 @@ import {
   SORT_BY,
   GET_POST,
   CHANGE_POST,
-  GET_COMMENTS,
   SORT_COMMENT_BY,
-  EDIT_COMMENT
+  EDIT_COMMENT,
+  CLEAR_POST,
+  LOAD_COMMENTS
 } from '../actions/types';
 
 const INITIAL_STATE = {
   allPosts: {},
+  allComments: {},
   categoriesFilter: [],
-  filteredPosts: {},
+  filteredPosts: [],
   sortBy: 'voteScore',
   postDetails: {},
-  comments: [],
   sortByComment: 'voteScore',
   openModal: false,
   editingComment: {}
@@ -23,7 +24,7 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
     let sortBy = state.sortBy;
-    let sortedComments = state.comments;
+    let sortedComments = null;
     let sortByComment = state.sortByComment;
     let filteredPosts =  null;
 
@@ -33,6 +34,19 @@ export default (state = INITIAL_STATE, action) => {
           allPosts: action.posts,
           filteredPosts: action.posts.filter((item) => !item.deleted),
         };
+        case LOAD_COMMENTS:
+        sortedComments = action.comments;
+
+        if (sortByComment === 'voteScore') {
+          sortedComments.sort((a,b) => b.voteScore - a.voteScore);
+        } else {
+          sortedComments.sort((a,b) => b.timestamp - a.timestamp);
+        }
+
+          return { ...state,
+            allComments: { ...state['allComments'],
+            [action.id] : sortedComments},
+          }
 
       case SORT_BY:
         sortBy = action.sortBy;
@@ -80,22 +94,9 @@ export default (state = INITIAL_STATE, action) => {
         return { ...state,
           postDetails: action.post,
         };
-      case GET_COMMENTS:
-
-      sortedComments = action.comments;
-
-      if (sortByComment === 'voteScore') {
-        sortedComments.sort((a,b) => b.voteScore - a.voteScore);
-      } else {
-        sortedComments.sort((a,b) => b.timestamp - a.timestamp);
-      }
-
-        return { ...state,
-          comments: sortedComments,
-        };
 
         case SORT_COMMENT_BY:
-
+        sortedComments = state.allComments[action.id];
         sortByComment = action.sortByComment;
 
         if (sortByComment === 'voteScore') {
@@ -104,10 +105,11 @@ export default (state = INITIAL_STATE, action) => {
           sortedComments.sort((a,b) => b.timestamp - a.timestamp);
         }
 
-          return { ...state,
-            comments: sortedComments,
-            sortByComment
-          };
+        return { ...state,
+          sortByComment,
+          allComments: { ...state['allComments'],
+          [action.id] : sortedComments},
+        }
       case CHANGE_POST:
         return { ...state,
           postDetails:  {
@@ -127,6 +129,14 @@ export default (state = INITIAL_STATE, action) => {
             editingComment: action.comment,
             openModal: action.openModal,
           };
+          case CLEAR_POST:
+            return { ...state,
+              postDetails: {},
+              comments: [],
+              sortByComment: 'voteScore',
+              openModal: false,
+              editingComment: {}
+            };
       default:
         return state;
       }

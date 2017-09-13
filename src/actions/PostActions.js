@@ -4,9 +4,10 @@ import {
   SORT_BY,
   GET_POST,
   CHANGE_POST,
-  GET_COMMENTS,
   SORT_COMMENT_BY,
-  EDIT_COMMENT
+  EDIT_COMMENT,
+  CLEAR_POST,
+  LOAD_COMMENTS
   } from './types';
 import * as PostsAPI from '../PostsAPI';
 
@@ -16,6 +17,13 @@ export const loadAllPosts = () => {
     PostsAPI.getAllPosts()
     .then(posts => {
       loadPosts(dispatch, posts);
+      posts.forEach((item) => {
+        !item.deleted && PostsAPI.getComments(item.id)
+          .then(comments => {
+            loadComments(dispatch, item.id, comments);
+          });
+      });
+
     })
     .then(() => updateFilteredPosts(dispatch))
     .catch((error) => {
@@ -23,6 +31,14 @@ export const loadAllPosts = () => {
     });
   };
 };
+
+const loadComments = (dispatch, id, comments) => {
+  dispatch({
+    type: LOAD_COMMENTS,
+    id,
+    comments
+  });
+}
 
 const loadPosts = (dispatch, posts) => {
   dispatch({
@@ -98,20 +114,13 @@ export const getComments = (id) => {
   return (dispatch) => {
     PostsAPI.getComments(id)
     .then(comments => {
-      getPostComments(dispatch, comments);
+      loadComments(dispatch, id, comments);
     })
     .catch((error) => {
       console.log(error);
     });
   };
 };
-
-const getPostComments = (dispatch, comments) => {
-  dispatch({
-    type: GET_COMMENTS,
-    comments
-  });
-}
 
 export const updatePostVoteScore = (id, increaseScore) => {
   return (dispatch) => {
@@ -157,10 +166,11 @@ export const createComment = (values) => {
   };
 };
 
-export function setSortCommentBy(sortByComment) {
+export function setSortCommentBy(sortByComment, id) {
   return {
     type: SORT_COMMENT_BY,
-    sortByComment
+    sortByComment,
+    id
   }
 };
 
@@ -210,4 +220,10 @@ export const updateComment = (id, body, parentId) => {
     dispatch(getComments(parentId));
 
   };
+};
+
+export function clearPost() {
+  return {
+    type: CLEAR_POST
+  }
 };

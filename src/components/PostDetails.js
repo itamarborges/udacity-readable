@@ -15,7 +15,8 @@ import {
   createComment,
   setSortCommentBy,
   editComment,
-  updateComment
+  updateComment,
+  clearPost
 } from './../actions';
 
 class PostDetails extends React.Component {
@@ -25,6 +26,10 @@ class PostDetails extends React.Component {
 
     this.props.getPost(id);
     this.props.getComments(id);
+  }
+
+  clearPost = () => {
+    this.props.clearPost();
   }
 
   closeModal = () => {
@@ -37,13 +42,13 @@ class PostDetails extends React.Component {
   deletePost = () => {
     const { id } = this.props.match.params;
     this.props.deletePost(id);
-
+    this.props.clearPost();
   }
 
   handleEdit = (idComment) => (e) => {
-    e.preventDefault();
-
     const { id } = this.props.match.params;
+
+    e.preventDefault();
 
     const values = serializeForm(e.target, { hash: true });
 
@@ -89,11 +94,13 @@ class PostDetails extends React.Component {
       voteScore = this.props.post.voteScore;
     }
 
-    const comments =
-    this.props.comments &&
-    this.props.comments.filter((item) => !item.deleted).length > 0;
+    const comments = this.props.allComments &&
+    this.props.allComments[id] &&
+    this.props.allComments[id].filter((item) => !item.deleted).length > 0;
 
     const { sortByComment } = this.props;
+
+    console.log(comments);
 
     return (
       <div className="container">
@@ -107,7 +114,7 @@ class PostDetails extends React.Component {
             <FaTrashO size={30}/>
             <h2>Delete Post</h2>
           </Link>
-          <Link to='/' className="closePostAction">
+          <Link to='/' className="closePostAction" onClick={this.clearPost}>
             <FaClose size={30}/>
             <h2>Close</h2>
           </Link>
@@ -140,8 +147,7 @@ class PostDetails extends React.Component {
 
           <div className="headerTable">
             <h3>Comments ({
-              this.props.comments &&
-              this.props.comments.filter((item) => !item.deleted).length}):</h3>
+              this.props.allComments[id] &&  this.props.allComments[id].filter((item) => !item.deleted).length}):</h3>
             {comments &&
             <div className="sortOptions">
               <h3>Sort by</h3>
@@ -152,7 +158,7 @@ class PostDetails extends React.Component {
                     value="voteScore"
                     name="sortBy"
                     checked={sortByComment === 'voteScore'}
-                    onChange={() => this.props.setSortCommentBy('voteScore')}
+                    onChange={() => this.props.setSortCommentBy('voteScore', id)}
                     /> voteScore
                 </label>
               </div>
@@ -163,16 +169,16 @@ class PostDetails extends React.Component {
                     value="timestamp"
                     name="sortBy"
                     checked={sortByComment === 'timestamp'}
-                    onChange={() => this.props.setSortCommentBy('timestamp')}
+                    onChange={() => this.props.setSortCommentBy('timestamp', id)}
                     /> timestamp
                 </label>
               </div>
             </div>
           }
         </div>
-            {this.props.comments &&
-             this.props.comments.length > 0 &&
-             this.props.comments.map((item) => !item.deleted && (
+            {this.props.allComments[id] &&
+             this.props.allComments[id].length > 0 &&
+             this.props.allComments[id].map((item) => !item.deleted && (
                  <Comment
                    key={item.id}
                    comment={item}
@@ -237,9 +243,9 @@ class PostDetails extends React.Component {
 
 const mapStateToProps = state => {
   const { post } = state.posts.postDetails;
-  const { comments, sortByComment, openModal, editingComment } = state.posts;
+  const { comments, sortByComment, openModal, editingComment, allComments } = state.posts;
 
-  return { post, comments, sortByComment, openModal, editingComment };
+  return { post, comments, sortByComment, openModal, editingComment, allComments };
 };
 
 export default connect(mapStateToProps, {
@@ -250,5 +256,6 @@ export default connect(mapStateToProps, {
   createComment,
   setSortCommentBy,
   editComment,
-  updateComment
+  updateComment,
+  clearPost
 }, null, {pure:false})(PostDetails);

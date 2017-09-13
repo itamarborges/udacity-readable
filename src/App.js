@@ -31,7 +31,7 @@ selectedCategory = (categoryName) => {
 
   render() {
 
-    const { filteredPosts, sortBy } = this.props.posts;
+    const { filteredPosts, sortBy, allComments } = this.props.posts;
 
     return (
       <div>
@@ -90,11 +90,8 @@ selectedCategory = (categoryName) => {
                filteredPosts.map((item) => !item.deleted && (
                 <PostSummary
                   key={item.id}
-                  id={item.id}
-                  title={item.title}
-                  category={item.category}
-                  voteScore={item.voteScore}
-                  timestamp={item.timestamp}
+                  post={item}
+                  qtdComents={allComments[item.id] && allComments[item.id].length.toString()}
                 />
               ))}
             </div>

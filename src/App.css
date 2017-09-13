@@ -40,6 +40,11 @@
   padding: 20px 0px;
 }
 
+.postSummaryTitle {
+  display: flex;
+  align-items: center;
+}
+
 .postSummaryDetails {
   display: flex;
   justify-content: space-between;
@@ -139,10 +144,12 @@
 
 .btnVoteScore{
   display: flex;
+  margin-right: 20px;
+  margin-top: 5px;
 }
 
-.btnVoteScore{
-  margin-right: 20px;
+.btnPost{
+  display: flex;
 }
 .comment {
   padding-top: 20px;
@@ -198,4 +205,8 @@
   margin-top: 5px;
   margin-bottom: 5px;
   font-size: inherit;
+}
+
+.noUnderline {
+  text-decoration:none;
 }
