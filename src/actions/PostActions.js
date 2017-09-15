@@ -11,7 +11,7 @@ import {
   } from './types';
 import * as PostsAPI from '../PostsAPI';
 
-export const loadAllPosts = () => {
+export const loadAllPosts = (category) => {
   return (dispatch) => {
 
     PostsAPI.getAllPosts()
@@ -25,7 +25,14 @@ export const loadAllPosts = () => {
       });
 
     })
-    .then(() => updateFilteredPosts(dispatch))
+    .then(() => {
+      debugger;
+      if (category) {
+        dispatch(setFilterPostByCategory(category))
+      } else {
+        updateFilteredPosts(dispatch)
+      }
+    })
     .catch((error) => {
       console.log(error);
     });
@@ -67,11 +74,22 @@ const getSpecificPost = (dispatch, post) => {
   });
 }
 
-export function setFilterPostByCategories(category) {
-  return {
-    type: UPDATE_FILTERED_POSTS,
-    category
-  }
+export function setFilterPostByCategory(categoryFilter) {
+  return (dispatch) => {
+    debugger;
+    if (categoryFilter) {
+
+      PostsAPI.getPostsByCategory(categoryFilter)
+      .then(posts => {
+        updateFilteredPosts(dispatch, posts, categoryFilter);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    } else {
+      updateFilteredPosts(dispatch);
+    }
+  };
 }
 
 export function setSortBy(sortBy) {
@@ -104,9 +122,11 @@ export const deletePost = (id) => {
   };
 };
 
-const updateFilteredPosts = (dispatch) => {
+const updateFilteredPosts = (dispatch, posts, categoryFilter) => {
   dispatch({
-    type: UPDATE_FILTERED_POSTS
+    type: UPDATE_FILTERED_POSTS,
+    posts,
+    categoryFilter
   });
 }
 
@@ -122,14 +142,14 @@ export const getComments = (id) => {
   };
 };
 
-export const updatePostVoteScore = (id, increaseScore) => {
+export const updatePostVoteScore = (id, increaseScore, category) => {
   return (dispatch) => {
     const body = increaseScore ? { option: "upVote" } : { option: "downVote" };
 
     PostsAPI.updatePostVoteScore(id, body)
     .then(() => {
       dispatch(getPost(id));
-      dispatch(loadAllPosts());
+      dispatch(loadAllPosts(category));
     })
     .catch((error) => {
       console.log(error);

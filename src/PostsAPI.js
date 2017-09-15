@@ -13,7 +13,11 @@ export const getAllCategories = () =>
 
 export const getAllPosts = () =>
   fetch(`${api}/posts`, { headers })
-    .then(res => res.json());
+  .then(res => res.json());
+
+export const getPostsByCategory = (category) =>
+  fetch(`${api}/${category}/posts`, { headers })
+  .then(res => res.json());
 
 export const createPost = (body) =>
   fetch(`${api}/posts`, {

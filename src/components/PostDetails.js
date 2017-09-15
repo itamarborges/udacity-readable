@@ -230,11 +230,8 @@ class PostDetails extends React.Component {
                   </div>
 
                   )}
-
-
             </Modal>
           </div>
-
       </div>
 
     );

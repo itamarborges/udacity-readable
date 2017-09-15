@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import FaTrashO from 'react-icons/lib/fa/trash-o';
 import {
   updatePostVoteScore,
   deletePost
@@ -9,9 +8,10 @@ import {
 
 class PostSummary extends React.Component {
 
-  increaseScore = (increase, id) => (e) => {
+  increaseScore = (increase, id, category) => (e) => {
     e.preventDefault();
-    this.props.updatePostVoteScore(id, increase);
+    debugger;
+    this.props.updatePostVoteScore(id, increase, category);
   }
 
   deletePost = (id) => (e) => {
@@ -29,10 +29,11 @@ class PostSummary extends React.Component {
       author,
     } = this.props.post;
 
-const urlPost = `/post/${id}`;
+    const urlPost = `/${category}/${id}`;
+    const categoryFilter = this.props.category !== '' ? this.props.category:  null;
 
     return (
-        <Link className="postSummary noUnderline" to={urlPost} >
+        <div>
           <div className="postSummaryTitle"><h4>{title}</h4>&nbsp;by&nbsp;<h4>{author}</h4></div>
           <div className="postSummaryDetails">
             <div className="postSummaryCategory">Category: {category}</div>
@@ -43,14 +44,14 @@ const urlPost = `/post/${id}`;
           </div>
          </div>
          <div className="btnVoteScore">
-           <button className="btnVoteScore" onClick={this.increaseScore(true, id)} > Increase VoteScore</button>
-           <button className="btnVoteScore" onClick={this.increaseScore(false, id)}> Decrease ScoreScore</button>
+           <button className="btnVoteScore" onClick={this.increaseScore(true, id, categoryFilter)} > Increase VoteScore</button>
+           <button className="btnVoteScore" onClick={this.increaseScore(false, id, categoryFilter)}> Decrease ScoreScore</button>
            <Link className="postSummary noUnderline" to={urlPost} >
              <button className="btnVoteScore" > POST DETAILS </button>
            </Link>
            <button className="btnVoteScore" onClick={this.deletePost(id)}> DELETE POST</button>
          </div>
-      </Link>
+      </div>
 
     );
   }
@@ -59,4 +60,4 @@ const urlPost = `/post/${id}`;
 export default connect(null, {
   updatePostVoteScore,
   deletePost
-})(PostSummary);
+},null, {pure:false})(PostSummary);

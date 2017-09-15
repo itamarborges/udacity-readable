@@ -11,6 +11,8 @@ export const FILTER_CATEGORY_POST = 'filter_category_post';
 export const SORT_BY = 'sort_by';
 //load all posts from API
 export const GET_POST = 'get_post';
+//load all posts from API
+export const GET_POSTS_BY_CATEGORY = 'get_post_by_category';
 //change the values of a post
 export const CHANGE_POST = 'change_post';
 //update a post votescore

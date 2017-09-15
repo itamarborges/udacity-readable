@@ -50,28 +50,23 @@ onPostChange = () => {
 render() {
   const id = this.props.match ? this.props.match.params.id : null;
 
-  const headerTitle = (id) ? 'Edit Post' : 'New Post';
-  const urlClose = (id) ? `/post/${id}` : '/';
-  const labelBtn = (id) ? 'Update Post' : 'Save Post';
+
   let title = '';
-  let category = '';
+  let category = 'disabled';
   let body = '';
   let author = '';
 
   //if there is a id, it`s editing a post
-
   if (this.props.post && id) {
     title = this.props.post.title;
     category = this.props.post.category;
     body = this.props.post.body;
     author = this.props.post.author;
-  } else {
-   title = '';
-   category = 'disabled';
-   body = '';
-   author = '';
-
   }
+
+  const headerTitle = (id) ? 'Edit Post' : 'New Post';
+  const urlClose = (id) ? `/${category}/${id}` : '/';
+  const labelBtn = (id) ? 'Update Post' : 'Save Post';
 
     return (
       <div className="container">
@@ -100,7 +95,6 @@ render() {
               ref={(el) => { this.categorySelect = el; }}
               onChange={this.onPostChange}
             >
-              <option value="disabled" disabled>Select a Category...</option>
               {this.props.categories && this.props.categories.length > 0 && this.props.categories.map((item) => (
                 <option key={item.name} value={item.name}>{item.name}</option>
               ))}
@@ -134,7 +128,7 @@ render() {
 
 const mapStateToProps = state => {
   const { post } = state.posts.postDetails;
-  console.log(post);
+
   return { post };
 };
 

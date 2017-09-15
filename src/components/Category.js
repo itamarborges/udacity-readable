@@ -1,26 +1,30 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { setFilterPostByCategories } from '../actions';
+import { Link } from 'react-router-dom';
 
 class Category extends React.Component {
-
-  onClickCategory = (categoryName) => {
-    this.props.setFilterPostByCategories(categoryName);
-  }
 
   render() {
     const { selected, categoryName } = this.props;
 
     return (
-      <div
-        key={categoryName}
-        className={selected === 'yes' ? "selectedCategory": "category"}
-        onClick={() => this.onClickCategory(categoryName)}>
+      <Link to={this.props.categoryFilter === categoryName ? '' : `/${categoryName}`}>
+        <div
+          key={categoryName}
+          className={selected === 'yes' ? "selectedCategory": "category"}
+        >
         <div className="categoryName">{categoryName}</div>
       </div>
+      </Link>
 
     );
   }
 }
 
-export default connect(null, { setFilterPostByCategories })(Category);
+  const mapStateToProps = state => {
+    const { categoryFilter } = state.posts;
+
+    return { categoryFilter };
+  };
+
+export default connect(mapStateToProps, null, null, {pure:false})(Category);

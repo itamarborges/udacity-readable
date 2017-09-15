@@ -13,7 +13,7 @@ import {
 const INITIAL_STATE = {
   allPosts: {},
   allComments: {},
-  categoriesFilter: [],
+  categoryFilter: '',
   filteredPosts: [],
   sortBy: 'voteScore',
   postDetails: {},
@@ -63,20 +63,19 @@ export default (state = INITIAL_STATE, action) => {
         };
 
       case UPDATE_FILTERED_POSTS:
-        let categoriesFilter = state.categoriesFilter;
+      debugger;
+        let categoryFilter = state.categoryFilter;
 
-        if (categoriesFilter.length > 0 &&
-          categoriesFilter.filter((item) => item === action.category).length > 0) {
-          categoriesFilter = categoriesFilter.filter((item) => item !== action.category);
-        } else {
-          action.category && categoriesFilter.push(action.category);
+        if (action.categoryFilter) {
+          categoryFilter = action.categoryFilter;
+          } else {
+          categoryFilter = '';
         }
 
-        filteredPosts = state.allPosts.filter((item) => !item.deleted );
-
-        if (categoriesFilter.length > 0 ) {
-          filteredPosts = filteredPosts.filter(
-            (item) => categoriesFilter.indexOf(item.category) >= 0 );
+        if (categoryFilter) {
+          filteredPosts = action.posts
+        } else {
+          filteredPosts = state.allPosts.filter((item) => !item.deleted );
         }
 
         if (sortBy === 'voteScore') {
@@ -87,7 +86,7 @@ export default (state = INITIAL_STATE, action) => {
 
 
         return { ...state,
-          categoriesFilter,
+          categoryFilter,
           filteredPosts
         };
       case GET_POST:

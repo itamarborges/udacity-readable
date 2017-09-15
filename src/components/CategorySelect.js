@@ -12,7 +12,6 @@ class CategorySelect extends React.Component {
           className="categorySelect"
           onChange={this.props.onChange}
         >
-          <option value="disabled" disabled>Select a Category...</option>
           {categories && categories.length > 0 && categories.map((item) => (
             <option key={item.name} value={item.name}>{item.name}</option>
           ))}
