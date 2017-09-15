@@ -26,7 +26,7 @@ export const loadAllPosts = (category) => {
 
     })
     .then(() => {
-      debugger;
+
       if (category) {
         dispatch(setFilterPostByCategory(category))
       } else {
@@ -76,7 +76,7 @@ const getSpecificPost = (dispatch, post) => {
 
 export function setFilterPostByCategory(categoryFilter) {
   return (dispatch) => {
-    debugger;
+
     if (categoryFilter) {
 
       PostsAPI.getPostsByCategory(categoryFilter)
@@ -234,7 +234,7 @@ const editSpecificComment = (openModal, comment) => {
 
 export const updateComment = (id, body, parentId) => {
   return (dispatch) => {
-    debugger;
+
     PostsAPI.updateComment(id, body);
 
     dispatch(getComments(parentId));

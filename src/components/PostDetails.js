@@ -58,7 +58,6 @@ class PostDetails extends React.Component {
 
   handleSubmit = (e) => {
     const id = this.props.match ? this.props.match.params.id : null;
-    debugger;
     e.preventDefault();
     const values = serializeForm(e.target, { hash: true });
     values.timestamp = Date.now();
@@ -99,8 +98,6 @@ class PostDetails extends React.Component {
     this.props.allComments[id].filter((item) => !item.deleted).length > 0;
 
     const { sortByComment } = this.props;
-
-    console.log(comments);
 
     return (
       <div className="container">

@@ -10,7 +10,6 @@ class PostSummary extends React.Component {
 
   increaseScore = (increase, id, category) => (e) => {
     e.preventDefault();
-    debugger;
     this.props.updatePostVoteScore(id, increase, category);
   }
 

@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Route, Link, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import {
   loadAllCategories,
   loadAllPosts,
   setSortBy } from './actions';
-import Category from './components/Category';
-import PostSummary from './components/PostSummary';
 import Post from './components/Post';
 import PostDetails from './components/PostDetails';
-import PlusSquare from 'react-icons/lib/fa/plus-square-o';
 import Home from './Home';
 import './App.css';
 
@@ -29,8 +26,6 @@ selectedCategory = (categoryName) => {
 }
 
   render() {
-
-    const { filteredPosts, sortBy, allComments, categoryFilter } = this.props.posts;
 
     return (
       <div>

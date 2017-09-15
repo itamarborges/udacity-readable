@@ -63,7 +63,6 @@ export default (state = INITIAL_STATE, action) => {
         };
 
       case UPDATE_FILTERED_POSTS:
-      debugger;
         let categoryFilter = state.categoryFilter;
 
         if (action.categoryFilter) {

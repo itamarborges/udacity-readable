@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   loadAllCategories,
   loadAllPosts,
@@ -8,29 +8,20 @@ import {
   setFilterPostByCategory } from './actions';
 import Category from './components/Category';
 import PostSummary from './components/PostSummary';
-import Post from './components/Post';
-import PostDetails from './components/PostDetails';
 import PlusSquare from 'react-icons/lib/fa/plus-square-o';
 import './App.css';
 
 class Home extends Component {
 
   componentWillReceiveProps(nextProps) {
-    debugger;
     if (nextProps.category &&
         nextProps.category !== this.props.category) {
-          console.log('disparou');
-          debugger;
       this.props.setFilterPostByCategory(nextProps.category);
     }
-    console.log(nextProps);
-    console.log('aqui 123');
-    console.log(this.props);
   }
 
 
   componentDidMount() {
-    debugger;
     const category = this.props.category ? this.props.category : null;
 
     this.props.loadAllPosts(category);

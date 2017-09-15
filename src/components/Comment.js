@@ -24,11 +24,6 @@ class Comment extends React.Component {
     this.props.deleteComment(id, parentId);
   }
 
-  maisUm = (value) => {
-  console.log(`rodou2222 ${value}`);
-  }
-
-
   render() {
     const { comment } = this.props;
 
