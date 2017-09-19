@@ -1,5 +1,5 @@
 const api = "http://localhost:5001";
-const token = 'authorization';
+const token = 'whatever-you-want';
 
 const headers = {
   'Accept': 'application/json',

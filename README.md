@@ -27,3 +27,9 @@ redux-thunk
 After installing this packages, you run the application using:
 
 npm start
+
+If you want to see the results in the server using Postman, don't forget to
+put the following header as a parameter:
+
+Key: "Content-Type" Value:"application/json"
+Key: "Authorization" Value: "whatever-you-want"
