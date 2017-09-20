@@ -18,6 +18,7 @@ import {
   updateComment,
   clearPost
 } from './../actions';
+import Page404 from './Page404';
 
 class PostDetails extends React.Component {
 
@@ -75,6 +76,12 @@ class PostDetails extends React.Component {
   }
 
   render() {
+    if (this.props.deleted) {
+      return (
+        <Page404 />
+      )
+    }
+
     let title = '';
     let category = '';
     let body = '';
@@ -236,10 +243,10 @@ class PostDetails extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const { post } = state.posts.postDetails;
+  const { post, deleted } = state.posts.postDetails;
   const { comments, sortByComment, openModal, editingComment, allComments } = state.posts;
 
-  return { post, comments, sortByComment, openModal, editingComment, allComments };
+  return { post, deleted, comments, sortByComment, openModal, editingComment, allComments };
 };
 
 export default connect(mapStateToProps, {

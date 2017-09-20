@@ -5,6 +5,7 @@ import serializeForm from 'form-serialize';
 import FaClose from 'react-icons/lib/fa/close';
 import { getPost, updatePost } from './../actions';
 import * as PostsAPI from '../PostsAPI';
+import Page404 from './Page404';
 
 class Post extends React.Component {
 
@@ -48,6 +49,11 @@ onPostChange = () => {
 }
 
 render() {
+  if (this.props.deleted) {
+    return (
+      <Page404 />
+    )
+  }
   const id = this.props.match ? this.props.match.params.id : null;
 
 
@@ -127,9 +133,9 @@ render() {
 }
 
 const mapStateToProps = state => {
-  const { post } = state.posts.postDetails;
+  const { post, deleted } = state.posts.postDetails;
 
-  return { post };
+  return { post, deleted };
 };
 
 export default connect(mapStateToProps, {

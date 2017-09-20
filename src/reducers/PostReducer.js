@@ -90,7 +90,7 @@ export default (state = INITIAL_STATE, action) => {
         };
       case GET_POST:
         return { ...state,
-          postDetails: action.post,
+          postDetails: Object.keys(action.post.post).length !== 0 ? action.post : { deleted:true },
         };
 
         case SORT_COMMENT_BY:

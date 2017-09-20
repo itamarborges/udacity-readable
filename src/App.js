@@ -9,6 +9,7 @@ import Post from './components/Post';
 import PostDetails from './components/PostDetails';
 import Home from './Home';
 import './App.css';
+import Page404 from './components/Page404';
 
 class App extends Component {
 
@@ -29,45 +30,49 @@ selectedCategory = (categoryName) => {
 
     return (
       <div>
-        <Route exact path='/' component={Home} />
-
         <Switch>
-          <Route exact path='/post' render={({ history }) => (
-            <Post
-              categories={this.props.categories.allCategories}
-              onGoBack={() => {
-                history.push('/');
-                this.props.loadAllPosts();
-              }
-            }/>
-          )} />
+          <Route exact path='/' component={Home} />
 
-          <Route exact path='/:category/edit/:id' render={({ history, match }) => (
-            <Post
-              categories={this.props.categories.allCategories}
-              match={match}
-              onGoBack={() => {
-                history.push(`/${match.params.category}/${match.params.id}`);
-                this.props.loadAllPosts();
-              }
-            }/>
-          )} />
+          <Switch>
+            <Route exact path='/post' render={({ history }) => (
+              <Post
+                categories={this.props.categories.allCategories}
+                onGoBack={() => {
+                  history.push('/');
+                  this.props.loadAllPosts();
+                }
+              }/>
+            )} />
 
-          <Route exact path='/:category/:id' render={({ history, match }) => (
-            <PostDetails
-              categories={this.props.categories.allCategories}
-              match={match}
-              onGoBack={() => {
-                history.push('/');
-                this.props.loadAllPosts();
-              }
-            }/>
-          )} />
+            <Route exact path='/:category/edit/:id' render={({ history, match }) => (
+              <Post
+                categories={this.props.categories.allCategories}
+                match={match}
+                onGoBack={() => {
+                  history.push(`/${match.params.category}/${match.params.id}`);
+                  this.props.loadAllPosts();
+                }
+              }/>
+            )} />
 
-        <Route exact path='/:category' render={({ match }) => (
-          <Home
-            category={`${match.params.category}`}/>
-        )} />
+            <Route exact path='/:category/:id' render={({ history, match }) => (
+              <PostDetails
+                categories={this.props.categories.allCategories}
+                match={match}
+                onGoBack={() => {
+                  history.push('/');
+                  this.props.loadAllPosts();
+                }
+              }/>
+            )} />
+
+          <Route exact path='/:category' render={({ match }) => (
+            <Home
+              category={`${match.params.category}`}/>
+          )} />
+          <Route component={Page404} />
+        </Switch>
+        <Route component={Page404} />
       </Switch>
       </div>
     );
